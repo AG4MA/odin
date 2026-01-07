@@ -6,7 +6,7 @@
 
 Create a decentralized, sovereign, and accessible AI ecosystem that runs on consumer hardware without requiring billion-dollar datacenters.
 
-## 📋 Phase 1: Proof of Concept — ✅ SCAFFOLD COMPLETE
+## 📋 Phase 1: Proof of Concept — ✅ SCAFFOLD COMPLETE 
 
 **Objective:** Build a 100 Million parameter model based on RWKV-v6 architecture, trained exclusively on synthetic math & coding data, running in the browser via WebAssembly.
 
