@@ -1,0 +1,234 @@
+================================================================================
+    ⚙️ THE LOW-LEVEL OPTIMIZER (The Surgeon)
+    Phase 1: WASM-Optimized Inference for 100M Model
+================================================================================
+
+MISSION: Make the model run FAST on consumer hardware. Every millisecond
+         counts. Every byte matters. Surgery-level precision.
+
+================================================================================
+TASK 1: WASM KERNEL DEVELOPMENT
+================================================================================
+
+[ ] 1.1 - Core Matrix Operations in WASM
+    - Hand-optimized matrix multiplication (GEMM)
+    - Batch normalization / Layer normalization
+    - Activation functions: SiLU, GELU, Sigmoid, Tanh
+    - Softmax (if needed for attention variants)
+    - LANGUAGE: Rust → WASM or C++ → Emscripten
+
+[ ] 1.2 - Mamba/RWKV Specific Kernels
+    - SSM recurrence: h(t) = A*h(t-1) + B*x(t)
+    - Selective scan operation (Mamba)
+    - WKV computation (RWKV time-mixing)
+    - Channel mixing operations
+    - CRITICAL: These are the bottleneck operations
+
+[ ] 1.3 - SIMD Optimization
+    - Leverage WASM SIMD128 instructions
+    - Vectorized operations for 4x float32
+    - Detect SIMD support, fallback to scalar
+    - TOOL: wasm-simd, Rust portable_simd
+
+[ ] 1.4 - Memory Layout Optimization
+    - Tensor layout: Row-major vs column-major analysis
+    - Cache-friendly access patterns
+    - Minimize memory allocations during inference
+    - Pre-allocate all buffers at model load
+
+================================================================================
+TASK 2: QUANTIZATION STRATEGIES
+================================================================================
+
+[ ] 2.1 - INT8 Quantization
+    - Post-training quantization (PTQ)
+    - Per-channel vs per-tensor scaling
+    - Calibration on representative data
+    - Accuracy validation: < 1% degradation target
+
+[ ] 2.2 - INT4 Quantization (Experimental)
+    - GPTQ-style quantization
+    - Group quantization (e.g., groups of 128)
+    - Mixed precision: embeddings FP16, layers INT4
+    - Evaluate quality vs size tradeoff
+
+[ ] 2.3 - Binary/Ternary Exploration (Research)
+    - Literature review: BitNet, 1.58-bit models
+    - Feasibility for 100M scale
+    - Training-aware quantization requirements
+    - DELIVERABLE: Research report, not implementation
+
+[ ] 2.4 - Quantization-Aware Kernels
+    - INT8 GEMM with dequantization
+    - Fused quantize-compute-dequantize
+    - Avoid precision loss in accumulation
+
+================================================================================
+TASK 3: BROWSER-SPECIFIC OPTIMIZATIONS
+================================================================================
+
+[ ] 3.1 - JavaScript-WASM Bridge Optimization
+    - Minimize JS↔WASM boundary crossings
+    - Use TypedArrays for zero-copy tensor transfer
+    - Batch operations to reduce call overhead
+    - Profile and eliminate bridge bottlenecks
+
+[ ] 3.2 - Memory Management
+    - WASM linear memory allocation strategy
+    - Avoid memory fragmentation
+    - Implement memory pooling for tensors
+    - Target: < 500MB WASM heap usage
+
+[ ] 3.3 - Streaming Inference
+    - Generate tokens one-by-one efficiently
+    - KV-cache equivalent for SSM state
+    - Avoid recomputation for each token
+    - Incremental state update
+
+[ ] 3.4 - Startup Optimization
+    - Lazy initialization where possible
+    - Parallel weight loading
+    - Progressive model activation
+    - Target: < 5 second cold start
+
+================================================================================
+TASK 4: PERFORMANCE BENCHMARKING
+================================================================================
+
+[ ] 4.1 - Micro-Benchmarks
+    - Individual kernel performance
+    - GEMM throughput (GFLOPS)
+    - Memory bandwidth utilization
+    - TOOL: Custom benchmark harness
+
+[ ] 4.2 - End-to-End Benchmarks
+    - Tokens per second (TPS) measurement
+    - Time to first token (TTFT)
+    - Memory peak usage
+    - Battery consumption (mobile)
+
+[ ] 4.3 - Cross-Device Testing Matrix
+    - Desktop: Intel, AMD, Apple Silicon
+    - Mobile: iPhone, Android flagship, budget phones
+    - Browser: Chrome, Firefox, Safari, Edge
+    - DELIVERABLE: Performance matrix spreadsheet
+
+[ ] 4.4 - Comparison Baselines
+    - llama.cpp (native): What's the WASM overhead?
+    - onnxruntime-web (stock): How much do we gain?
+    - WebGPU (future): Potential improvements
+
+================================================================================
+TASK 5: WEBGPU EXPLORATION (FUTURE-PROOFING)
+================================================================================
+
+[ ] 5.1 - WebGPU Feasibility Study
+    - Browser support status (Chrome stable, others?)
+    - API capabilities for ML workloads
+    - Shader programming requirements (WGSL)
+    - DELIVERABLE: WebGPU readiness report
+
+[ ] 5.2 - Hybrid WASM/WebGPU Architecture
+    - Design: GPU for matmul, CPU for control flow
+    - Fallback strategy: WebGPU → WASM → JS
+    - Memory transfer optimization CPU↔GPU
+
+[ ] 5.3 - WebGPU Kernel Prototypes
+    - Implement GEMM in WGSL
+    - Performance comparison vs WASM SIMD
+    - Identify WebGPU-suitable operations
+
+================================================================================
+TASK 6: BUILD & TOOLING
+================================================================================
+
+[ ] 6.1 - Build Pipeline
+    - Rust/C++ → WASM compilation
+    - Optimization flags (-O3, LTO, wasm-opt)
+    - Size optimization (remove dead code)
+    - TOOL: wasm-pack, Emscripten, wasm-opt
+
+[ ] 6.2 - Testing Infrastructure
+    - Unit tests for each kernel
+    - Numerical accuracy tests (compare to FP32 reference)
+    - Fuzzing for edge cases
+    - CI/CD integration
+
+[ ] 6.3 - Profiling Tools
+    - WASM profiler integration
+    - Chrome DevTools performance analysis
+    - Flame graphs for hotspot identification
+    - Memory leak detection
+
+[ ] 6.4 - Documentation
+    - Kernel API documentation
+    - Performance tuning guide
+    - Integration guide for Builder
+
+================================================================================
+DELIVERABLES SUMMARY
+================================================================================
+
+1. [ ] Optimized WASM Kernel Library
+2. [ ] INT8 Quantization Pipeline
+3. [ ] Performance Benchmark Suite
+4. [ ] Cross-Device Performance Matrix
+5. [ ] WebGPU Feasibility Report
+6. [ ] Build & Test Infrastructure
+7. [ ] Performance Tuning Documentation
+
+================================================================================
+DEPENDENCIES
+================================================================================
+
+→ RECEIVES FROM: Architect (operation specifications)
+→ RECEIVES FROM: Builder (integration requirements)
+→ PARALLEL WITH: Data Chef (independent work)
+→ BLOCKS: Final demo performance targets
+
+================================================================================
+SUCCESS CRITERIA
+================================================================================
+
+✓ WASM kernels 2x faster than stock onnxruntime-web
+✓ INT8 model < 200MB download size
+✓ > 10 tokens/second on M1 MacBook
+✓ > 3 tokens/second on mid-range smartphone
+✓ Works without WebGPU (pure WASM fallback)
+✓ Memory usage < 500MB
+
+================================================================================
+PERFORMANCE TARGETS (DETAILED)
+================================================================================
+
+| Device Category      | TPS Target | Memory Target |
+|---------------------|------------|---------------|
+| Desktop (modern)     | > 20 TPS   | < 400 MB     |
+| Laptop (M1/Intel i5) | > 10 TPS   | < 400 MB     |
+| Tablet (iPad/Android)| > 5 TPS    | < 350 MB     |
+| Phone (flagship)     | > 3 TPS    | < 300 MB     |
+| Phone (budget)       | > 1 TPS    | < 250 MB     |
+
+================================================================================
+TECHNOLOGY STACK
+================================================================================
+
+Language:       Rust (primary), C++ (fallback)
+Compilation:    wasm-pack, wasm-bindgen
+Optimization:   wasm-opt, binaryen
+SIMD:           wasm-simd128
+Profiling:      Chrome DevTools, wasm-profiler
+Testing:        wasm-bindgen-test, criterion
+
+================================================================================
+RESEARCH REFERENCES
+================================================================================
+
+- BitNet: 1-bit LLMs (Microsoft Research)
+- GPTQ: Accurate Post-Training Quantization
+- Mamba: Linear-Time Sequence Modeling
+- RWKV: RNN with Transformer-level Performance
+- WebAssembly SIMD Specification
+- WebGPU Specification (W3C)
+
+================================================================================

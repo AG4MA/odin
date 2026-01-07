@@ -1,0 +1,19 @@
+# Data Generators Structure
+# Each generator produces verified synthetic data
+
+generators/
+├── math/
+│   ├── arithmetic.py      # +, -, *, /
+│   ├── algebra.py         # equations
+│   ├── logic.py           # syllogisms
+│   └── patterns.py        # sequences
+├── code/
+│   ├── algorithms.py      # sorting, search
+│   ├── completion.py      # fill-in-the-blank
+│   └── docstrings.py      # code <-> explanation
+├── validators/
+│   ├── math_validator.py  # SymPy verification
+│   └── code_validator.py  # execution sandbox
+└── utils/
+    ├── formatter.py       # output formatting
+    └── tokenizer.py       # pre-tokenization

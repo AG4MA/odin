@@ -1,0 +1,44 @@
+# ODIN-100M Model Configuration
+# Architecture: RWKV-v6 (Eagle)
+# Target: ~100M parameters, WASM-compatible
+
+model:
+  name: "ODIN-100M"
+  architecture: "rwkv-v6"
+  
+  # Core dimensions
+  vocab_size: 32768
+  embedding_dim: 768
+  num_layers: 12
+  num_heads: 12
+  head_dim: 64          # embedding_dim / num_heads
+  ffn_dim: 2688         # embedding_dim * 3.5
+  
+  # Sequence
+  max_seq_len: 4096
+  
+  # Regularization
+  dropout: 0.0          # No dropout for small model
+  layer_norm_eps: 1e-5
+
+# Calculated parameters breakdown:
+# - Embedding: 32768 * 768 = 25.2M
+# - Per layer: ~6.2M * 12 = 74.4M  
+# - Output head: tied with embedding
+# - Total: ~100M
+
+training:
+  batch_size: 32
+  learning_rate: 6e-4
+  weight_decay: 0.1
+  warmup_steps: 1000
+  max_steps: 50000
+  gradient_clip: 1.0
+  
+tokenizer:
+  type: "bpe"
+  vocab_size: 32768
+
+wasm:
+  target_memory_mb: 400
+  quantization: "int8"

@@ -1,0 +1,219 @@
+================================================================================
+    🌐 THE DISTRIBUTED BUILDER (The Swarm Architect)
+    Phase 1: Training Infrastructure for 100M Model
+================================================================================
+
+MISSION: Build the infrastructure to train and serve the model. Phase 1 is
+         SIMPLIFIED - single machine training, browser deployment focus.
+
+NOTE: Full P2P swarm training is PHASE 2. Phase 1 proves the concept works
+      before we distribute it.
+
+================================================================================
+TASK 1: TRAINING INFRASTRUCTURE (SINGLE NODE)
+================================================================================
+
+[ ] 1.1 - Training Framework Selection
+    - Evaluate: PyTorch vs JAX vs MLX
+    - Criteria: Mamba/RWKV support, export capability, community
+    - RECOMMENDATION: PyTorch (ecosystem) or JAX (XLA export)
+    - DELIVERABLE: Framework decision document
+
+[ ] 1.2 - Training Pipeline Setup
+    - Data loading: Efficient streaming from synthetic dataset
+    - Mixed precision: FP16 training with FP32 accumulation
+    - Checkpointing: Regular saves, resumable training
+    - Logging: Loss curves, gradient norms, eval metrics
+    - TOOL: Weights & Biases or MLflow integration
+
+[ ] 1.3 - Compute Requirements Analysis
+    - Estimate: GPU hours for 100M model on 10B tokens
+    - Target hardware: Single A100 (40GB) or 4x RTX 4090
+    - Budget estimation: Cloud vs local
+    - DELIVERABLE: Compute budget proposal
+
+[ ] 1.4 - Evaluation Pipeline
+    - Integration with Architect's benchmark suite
+    - Automated eval every N steps
+    - Early stopping criteria
+    - Comparison baselines: GPT-2 small, Phi-1
+
+================================================================================
+TASK 2: MODEL EXPORT PIPELINE
+================================================================================
+
+[ ] 2.1 - ONNX Export
+    - Convert trained PyTorch/JAX model to ONNX
+    - Verify numerical equivalence
+    - Optimize ONNX graph (constant folding, fusion)
+    - TOOL: torch.onnx or jax2onnx
+
+[ ] 2.2 - ONNX to WASM Compilation
+    - Research: onnxruntime-web vs custom WASM
+    - Evaluate: ONNX Runtime Web capabilities
+    - Alternative: Direct WASM codegen from model
+    - DELIVERABLE: Export pipeline documentation
+
+[ ] 2.3 - Model Quantization for Web
+    - Post-training quantization: FP32 → FP16 → INT8
+    - Coordinate with Optimizer for aggressive quantization
+    - Validate accuracy after each quantization level
+    - TARGET: < 200MB model file for browser
+
+[ ] 2.4 - Weight Compression
+    - Research: Weight pruning compatibility
+    - Implement: Gzip/Brotli compression for transfer
+    - Design: Progressive loading (stream weights)
+
+================================================================================
+TASK 3: BROWSER RUNTIME DEVELOPMENT
+================================================================================
+
+[ ] 3.1 - WASM Runtime Integration
+    - Set up onnxruntime-web or custom runtime
+    - Memory management for WASM heap
+    - Handle browser memory limits (~2GB typical)
+    - REPO: /browser_runtime/
+
+[ ] 3.2 - JavaScript API Design
+    - Clean async API: model.generate(prompt)
+    - Streaming token output
+    - Progress callbacks for loading
+    - Error handling and recovery
+
+    ```javascript
+    // Target API:
+    const model = await OdinLLM.load('/model.onnx');
+    const stream = model.generate("Solve: 2x + 3 = 7", {
+        maxTokens: 256,
+        temperature: 0.7
+    });
+    for await (const token of stream) {
+        console.log(token);
+    }
+    ```
+
+[ ] 3.3 - Web Worker Architecture
+    - Offload inference to Web Worker (non-blocking UI)
+    - SharedArrayBuffer for efficient tensor transfer
+    - Fallback for browsers without Worker support
+
+[ ] 3.4 - Tokenizer Implementation
+    - Port tokenizer to JavaScript
+    - Options: BPE (tiktoken-style) or SentencePiece
+    - Vocabulary size recommendation: 32K-50K
+    - WASM tokenizer if JS is too slow
+
+================================================================================
+TASK 4: DEMO APPLICATION
+================================================================================
+
+[ ] 4.1 - Web Interface Development
+    - Simple chat interface
+    - Math problem solver mode
+    - Code completion mode
+    - Show reasoning steps (chain-of-thought display)
+    - TECH: Vanilla JS or lightweight framework (Preact)
+
+[ ] 4.2 - Performance Dashboard
+    - Tokens per second display
+    - Memory usage monitor
+    - Device capability detection
+    - Comparison with baseline (show efficiency)
+
+[ ] 4.3 - Offline Capability
+    - Service Worker for offline use
+    - Cache model weights locally
+    - Full offline inference (no server needed)
+    - Progressive Web App (PWA) setup
+
+[ ] 4.4 - Benchmark Page
+    - Run standardized benchmarks in browser
+    - Compare across devices (crowdsourced benchmarking)
+    - Public leaderboard of device performance
+
+================================================================================
+TASK 5: DEPLOYMENT INFRASTRUCTURE
+================================================================================
+
+[ ] 5.1 - Static Hosting Setup
+    - CDN deployment for model weights
+    - Chunked downloads (resume support)
+    - Geographic distribution
+    - OPTIONS: Cloudflare R2, GitHub Releases, IPFS
+
+[ ] 5.2 - Version Management
+    - Model versioning system
+    - Backward compatibility for API
+    - A/B testing infrastructure for model variants
+
+[ ] 5.3 - Analytics & Monitoring
+    - Privacy-respecting usage analytics
+    - Error reporting (opt-in)
+    - Performance metrics collection
+
+================================================================================
+FUTURE: PHASE 2 - DISTRIBUTED TRAINING (PLANNING ONLY)
+================================================================================
+
+[ ] P2.1 - Research: Petals Architecture
+    - Study: hivemind, Petals project
+    - Analyze: Communication patterns, failure handling
+    - Document: Lessons learned
+
+[ ] P2.2 - Research: Federated Learning
+    - Privacy-preserving gradient sharing
+    - Differential privacy requirements
+    - Aggregation strategies
+
+[ ] P2.3 - Research: Security Model
+    - Sybil attack prevention
+    - Data poisoning detection
+    - Byzantine fault tolerance
+
+NOTE: Phase 2 only starts AFTER Phase 1 proves the model works.
+
+================================================================================
+DELIVERABLES SUMMARY
+================================================================================
+
+1. [ ] Training Pipeline (reproducible)
+2. [ ] Trained 100M Model Checkpoint
+3. [ ] ONNX Export Pipeline
+4. [ ] WASM Runtime Package
+5. [ ] Browser Demo Application
+6. [ ] Deployment Infrastructure
+7. [ ] Documentation & Tutorials
+
+================================================================================
+DEPENDENCIES
+================================================================================
+
+→ RECEIVES FROM: Architect (model architecture)
+→ RECEIVES FROM: Data Chef (training dataset)
+→ RECEIVES FROM: Optimizer (quantized kernels, if ready)
+→ BLOCKS: Public demo release
+
+================================================================================
+SUCCESS CRITERIA
+================================================================================
+
+✓ Model trains to convergence on synthetic data
+✓ ONNX export with < 1% accuracy loss
+✓ Browser loads model in < 30 seconds (good connection)
+✓ Inference runs at > 5 tokens/second on modern laptop
+✓ Demo works offline after initial load
+✓ Works on Chrome, Firefox, Safari, Edge
+
+================================================================================
+TECHNOLOGY STACK
+================================================================================
+
+Training:       PyTorch 2.x + CUDA
+Export:         ONNX + onnxruntime
+Browser:        onnxruntime-web + TypeScript
+Demo:           HTML5 + CSS + Vanilla JS
+Hosting:        Cloudflare Pages + R2
+Monitoring:     Plausible Analytics (privacy-first)
+
+================================================================================

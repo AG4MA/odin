@@ -1,0 +1,125 @@
+================================================================================
+    🏛️ THE ARCHITECT MATHEMATICIAN (The Visionary)
+    Phase 1: 100M Parameter Mamba/RWKV Model - Browser-Ready
+================================================================================
+
+MISSION: Design the mathematical foundation for a lightweight, efficient model
+         that proves reasoning capability without Transformer overhead.
+
+================================================================================
+TASK 1: ARCHITECTURE SELECTION & DESIGN
+================================================================================
+
+[ ] 1.1 - Comparative Analysis: Mamba vs RWKV for 100M Scale
+    - Evaluate State Space Models (SSM) complexity at 100M params
+    - Analyze RWKV-v6 linear attention mechanism
+    - Decision matrix: memory footprint, inference speed, training stability
+    - DELIVERABLE: Architecture decision document with mathematical proofs
+
+[ ] 1.2 - Design the Core Recurrence Equation
+    - For Mamba: Define selective state space parameters (Δ, A, B, C)
+    - For RWKV: Define WKV attention formula with time-mixing
+    - Target: O(N) complexity for both training and inference
+    - CONSTRAINT: Must be expressible in 32-bit float for WASM compatibility
+
+[ ] 1.3 - Memory State Architecture
+    - Design hidden state size (recommend: 512-1024 dimensions)
+    - Define number of layers (recommend: 12-24 layers for 100M)
+    - Calculate exact parameter count breakdown:
+      * Embedding layers
+      * Recurrent state matrices
+      * Output projection
+    - DELIVERABLE: Parameter budget spreadsheet
+
+================================================================================
+TASK 2: MATHEMATICAL STABILITY FOR SMALL MODELS
+================================================================================
+
+[ ] 2.1 - Gradient Flow Analysis
+    - Prove gradient stability through N layers without explosion/vanishing
+    - Design initialization scheme (Xavier? Kaiming? Custom?)
+    - Define learning rate bounds for stable training
+    - DELIVERABLE: Mathematical proof of training stability
+
+[ ] 2.2 - Numerical Precision Requirements
+    - Analyze minimum precision needed (FP32, FP16, INT8)
+    - Identify numerical bottlenecks in recurrence computation
+    - Design overflow protection for long sequences
+    - CONSTRAINT: Must degrade gracefully to FP32 in WASM
+
+[ ] 2.3 - Positional Encoding Strategy
+    - Mamba: Analyze if positional encoding is needed (state carries position)
+    - RWKV: Design time-decay factors for position awareness
+    - Target: Handle sequences up to 4096 tokens minimum
+
+================================================================================
+TASK 3: REASONING CAPABILITY DESIGN
+================================================================================
+
+[ ] 3.1 - Define "Reasoning" Metrics
+    - Mathematical reasoning: GSM8K-style problems
+    - Coding reasoning: HumanEval-style completion
+    - Logical reasoning: Simple syllogisms
+    - DELIVERABLE: Evaluation benchmark suite definition
+
+[ ] 3.2 - Architecture Modifications for Reasoning
+    - Analyze if 100M params can capture chain-of-thought
+    - Design "scratchpad" mechanism within state
+    - Consider: Multiple recurrence passes per token?
+    - HYPOTHESIS: Small models CAN reason if trained on pure reasoning data
+
+[ ] 3.3 - Attention-Free Associative Memory
+    - Design mechanism for retrieving relevant context from state
+    - Analyze information bottleneck of fixed-size hidden state
+    - Propose: Hierarchical state? Compressed memory bank?
+
+================================================================================
+TASK 4: WASM-COMPATIBLE DESIGN CONSTRAINTS
+================================================================================
+
+[ ] 4.1 - Operation Audit for WASM
+    - List ALL mathematical operations in forward pass
+    - Verify each operation is WASM-compatible
+    - Avoid: Complex number operations, exotic activations
+    - ALLOWED: matmul, exp, sigmoid, tanh, basic arithmetic
+
+[ ] 4.2 - Memory Layout Specification
+    - Design tensor memory layout for cache-friendly access
+    - Define maximum memory footprint: TARGET < 500MB in browser
+    - Specify: Weights format, activation buffer sizes, state size
+
+[ ] 4.3 - Computational Graph Simplification
+    - Minimize dynamic shapes (WASM prefers static)
+    - Design fixed-size buffers where possible
+    - DELIVERABLE: Simplified computational graph diagram
+
+================================================================================
+DELIVERABLES SUMMARY
+================================================================================
+
+1. [ ] Architecture Decision Document (Mamba vs RWKV)
+2. [ ] Mathematical Specification (equations, dimensions, param count)
+3. [ ] Stability Proof (gradients, numerical precision)
+4. [ ] Reasoning Benchmark Definition
+5. [ ] WASM Compatibility Report
+6. [ ] Computational Graph Diagram
+
+================================================================================
+DEPENDENCIES
+================================================================================
+
+→ BLOCKS: Optimizer (needs architecture to write kernels)
+→ BLOCKS: Data Chef (needs to know model capacity for curriculum)
+→ RECEIVES FROM: None (this is the foundation)
+
+================================================================================
+SUCCESS CRITERIA
+================================================================================
+
+✓ Architecture fits in 100M ± 5M parameters
+✓ Single forward pass < 100ms on consumer CPU (estimated)
+✓ All operations WASM-compatible
+✓ Mathematical proof of O(N) complexity
+✓ Clear reasoning capability hypothesis to test
+
+================================================================================

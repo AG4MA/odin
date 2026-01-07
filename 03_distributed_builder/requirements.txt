@@ -1,0 +1,24 @@
+# ODIN-100M Requirements
+# Training and export dependencies
+
+# Core ML
+torch>=2.1.0
+numpy>=1.24.0
+
+# Training utilities
+tqdm>=4.65.0
+wandb>=0.15.0
+
+# Data processing
+datasets>=2.14.0
+tokenizers>=0.14.0
+
+# Export
+onnx>=1.14.0
+onnxruntime>=1.16.0
+
+# Math validation (Data Chef)
+sympy>=1.12
+
+# Config
+pyyaml>=6.0

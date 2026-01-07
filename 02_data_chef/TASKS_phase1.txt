@@ -1,0 +1,183 @@
+================================================================================
+    🧪 THE DATA CHEF (The Alchemist)
+    Phase 1: Synthetic Math & Coding Dataset for 100M Model
+================================================================================
+
+MISSION: Create a pure, synthetic dataset that teaches reasoning from first
+         principles. No web scraping. No contaminated data. Pure knowledge.
+
+================================================================================
+TASK 1: SYNTHETIC MATHEMATICS DATA GENERATION
+================================================================================
+
+[ ] 1.1 - Arithmetic Foundations Generator
+    - Generate: Addition, subtraction, multiplication, division
+    - Range: 1-digit to 6-digit numbers
+    - Format: "Question: 234 + 567 = ?\nReasoning: ...\nAnswer: 801"
+    - Volume: 1M examples with step-by-step solutions
+    - TOOL: Python script with symbolic verification
+
+[ ] 1.2 - Algebra Problem Generator
+    - Linear equations: "Solve for x: 3x + 5 = 20"
+    - Quadratic equations (simple): "x² - 5x + 6 = 0"
+    - Word problems: "John has 3 apples..."
+    - Volume: 500K examples
+    - VALIDATION: SymPy verification of all solutions
+
+[ ] 1.3 - Logic & Reasoning Generator
+    - Syllogisms: "All A are B. All B are C. Therefore..."
+    - Set theory: "If A ⊂ B and x ∈ A, then..."
+    - Boolean logic: Truth tables, implications
+    - Volume: 200K examples
+    - FORMAT: Include explicit reasoning chain
+
+[ ] 1.4 - Number Theory & Patterns
+    - Prime number identification
+    - Fibonacci sequences
+    - Pattern completion: "2, 4, 8, 16, ?"
+    - Volume: 100K examples
+
+================================================================================
+TASK 2: SYNTHETIC CODING DATA GENERATION
+================================================================================
+
+[ ] 2.1 - Algorithm Implementation Generator
+    - Basic algorithms: sorting, searching, recursion
+    - Data structures: arrays, linked lists, trees, graphs
+    - Format: Problem → Reasoning → Code → Test cases
+    - Languages: Python primary, JavaScript secondary
+    - Volume: 300K examples
+    - VALIDATION: All code must execute and pass tests
+
+[ ] 2.2 - Code Completion Generator
+    - Function signature → implementation
+    - Partial code → completion
+    - Bug identification and fixing
+    - Volume: 200K examples
+    - TOOL: AST manipulation for valid syntax guarantee
+
+[ ] 2.3 - Docstring & Explanation Generator
+    - Code → natural language explanation
+    - Natural language → code translation
+    - Volume: 100K bidirectional examples
+
+[ ] 2.4 - Test Case Generation
+    - Given function → generate comprehensive tests
+    - Edge cases: empty input, large numbers, special chars
+    - Volume: 100K examples
+
+================================================================================
+TASK 3: DATA QUALITY & VALIDATION PIPELINE
+================================================================================
+
+[ ] 3.1 - Symbolic Verification System
+    - Math: SymPy validation of all solutions
+    - Code: Execution sandbox with test suites
+    - Logic: Formal logic checker
+    - REQUIREMENT: 100% of data must pass verification
+
+[ ] 3.2 - Diversity Analysis
+    - Ensure coverage of difficulty levels
+    - Balance between problem types
+    - Prevent repetitive patterns
+    - TOOL: Embedding clustering analysis
+
+[ ] 3.3 - Anti-Collapse Measures
+    - Track solution diversity metrics
+    - Prevent mode collapse in generation
+    - Inject controlled randomness
+    - MONITOR: Perplexity and entropy metrics
+
+[ ] 3.4 - Format Standardization
+    - Consistent tokenization-friendly format
+    - Clear delimiters: <problem> <reasoning> <solution>
+    - UTF-8 clean, no exotic characters
+    - Max sequence length: 2048 tokens
+
+================================================================================
+TASK 4: CURRICULUM DESIGN
+================================================================================
+
+[ ] 4.1 - Difficulty Progression
+    - Level 1: Single-step problems (1-digit arithmetic)
+    - Level 2: Multi-step problems (word problems)
+    - Level 3: Abstract reasoning (algebra, patterns)
+    - Level 4: Complex synthesis (algorithm design)
+    - DELIVERABLE: Curriculum schedule for training
+
+[ ] 4.2 - Skill Tree Mapping
+    - Define prerequisite relationships
+    - Example: addition → multiplication → algebra
+    - Ensure model sees prerequisites before advanced topics
+
+[ ] 4.3 - Interleaving Strategy
+    - Mix math and coding for transfer learning
+    - Ratio recommendation: 60% math, 40% coding
+    - Prevent catastrophic forgetting
+
+================================================================================
+TASK 5: DATA GENERATION INFRASTRUCTURE
+================================================================================
+
+[ ] 5.1 - Generator Scripts
+    - Python-based modular generators
+    - Configurable difficulty, volume, format
+    - Reproducible with seed control
+    - REPO: /data_generators/
+
+[ ] 5.2 - Validation Pipeline
+    - Automated testing of all generated data
+    - Parallel execution for speed
+    - Failure logging and analysis
+    - REPO: /validators/
+
+[ ] 5.3 - Dataset Packaging
+    - Tokenized format ready for training
+    - Sharded files for distributed loading
+    - Metadata: statistics, provenance, version
+    - FORMAT: Parquet or TFRecord
+
+================================================================================
+DELIVERABLES SUMMARY
+================================================================================
+
+1. [ ] Math Dataset: ~1.8M verified examples
+2. [ ] Coding Dataset: ~700K verified examples
+3. [ ] Total: ~2.5M high-quality synthetic examples
+4. [ ] Validation Pipeline (100% coverage)
+5. [ ] Curriculum Schedule
+6. [ ] Generator Source Code (reproducible)
+7. [ ] Dataset Statistics Report
+
+================================================================================
+DEPENDENCIES
+================================================================================
+
+→ RECEIVES FROM: Architect (model capacity, sequence length limits)
+→ BLOCKS: Training start
+→ PARALLEL WITH: Optimizer (can work simultaneously)
+
+================================================================================
+SUCCESS CRITERIA
+================================================================================
+
+✓ Zero contaminated/web-scraped data
+✓ 100% of math solutions verified correct
+✓ 100% of code executes without errors
+✓ Sufficient volume for 100M model (~10B tokens target)
+✓ Clear reasoning chains in all examples
+✓ Reproducible generation pipeline
+
+================================================================================
+ESTIMATED EFFORT
+================================================================================
+
+- Generator development: 2 weeks
+- Data generation: 1 week (compute)
+- Validation: 1 week (parallel with generation)
+- Curriculum design: 3 days
+- Packaging: 2 days
+
+TOTAL: ~4-5 weeks
+
+================================================================================
