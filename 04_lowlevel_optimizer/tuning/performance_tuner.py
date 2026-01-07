@@ -98,12 +98,12 @@ class PerformanceTuner:
         
         import torch
         
-        bottlenecks = {
-            "time_mixing": {"time_ms": 0, "percentage": 0},
-            "channel_mixing": {"time_ms": 0, "percentage": 0},
-            "layernorm": {"time_ms": 0, "percentage": 0},
-            "embedding": {"time_ms": 0, "percentage": 0},
-            "output_head": {"time_ms": 0, "percentage": 0},
+        bottlenecks: Dict[str, Dict[str, float]] = {
+            "time_mixing": {"time_ms": 0.0, "percentage": 0.0},
+            "channel_mixing": {"time_ms": 0.0, "percentage": 0.0},
+            "layernorm": {"time_ms": 0.0, "percentage": 0.0},
+            "embedding": {"time_ms": 0.0, "percentage": 0.0},
+            "output_head": {"time_ms": 0.0, "percentage": 0.0},
         }
         
         # Profile each component (simplified)

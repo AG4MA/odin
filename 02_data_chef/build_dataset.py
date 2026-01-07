@@ -7,7 +7,7 @@ Assembla, valida e pacchettizza il dataset finale per training.
 import json
 import random
 from pathlib import Path
-from typing import List, Dict, Generator
+from typing import List, Dict, Generator, Any
 import sys
 
 # Import generators
@@ -31,7 +31,7 @@ def generate_full_dataset(
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
     
-    stats = {
+    stats: Dict[str, Any] = {
         "arithmetic": 0,
         "algebra": 0, 
         "python": 0,
