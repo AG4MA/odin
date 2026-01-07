@@ -1,0 +1,32 @@
+# CODEOWNERS - Defines code ownership for review requirements
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owners for everything
+* @odin-maintainers
+
+# Module-specific ownership
+# Architect Mathematician - Model architecture
+/01_architect_mathematician/ @odin-maintainers
+
+# Data Chef - Data generation and processing
+/02_data_chef/ @odin-maintainers
+
+# Distributed Builder - Training and deployment
+/03_distributed_builder/ @odin-maintainers
+
+# Low-level Optimizer - Performance and WASM
+/04_lowlevel_optimizer/ @odin-maintainers
+
+# Swarm Network - Distributed training
+/05_swarm_network/ @odin-maintainers
+
+# Documentation
+*.md @odin-maintainers
+/docs/ @odin-maintainers
+
+# CI/CD and Infrastructure
+/.github/ @odin-maintainers
+/pyrightconfig.json @odin-maintainers
+
+# Browser runtime
+/03_distributed_builder/browser/ @odin-maintainers
