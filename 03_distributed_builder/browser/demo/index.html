@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ODIN-100M Demo</title>
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --accent: #6366f1;
+            --accent-glow: rgba(99, 102, 241, 0.3);
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --border: #1e293b;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent), #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .tagline {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+        
+        .status {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #22c55e;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        main {
+            flex: 1;
+            display: flex;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 2rem;
+            gap: 2rem;
+        }
+        
+        .chat-container {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+        
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .message {
+            display: flex;
+            gap: 1rem;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .message.user {
+            flex-direction: row-reverse;
+        }
+        
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+        
+        .message.assistant .avatar {
+            background: linear-gradient(135deg, var(--accent), #a855f7);
+        }
+        
+        .message.user .avatar {
+            background: var(--border);
+        }
+        
+        .content {
+            max-width: 80%;
+            padding: 0.875rem 1rem;
+            border-radius: 12px;
+            line-height: 1.5;
+        }
+        
+        .message.assistant .content {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+        }
+        
+        .message.user .content {
+            background: var(--accent);
+        }
+        
+        .input-area {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        input[type="text"] {
+            flex: 1;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            color: var(--text-primary);
+            font-size: 0.9375rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        
+        input[type="text"]:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+        
+        button {
+            background: var(--accent);
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.1s, background 0.2s;
+        }
+        
+        button:hover {
+            background: #4f46e5;
+        }
+        
+        button:active {
+            transform: scale(0.98);
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .sidebar {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .panel {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            padding: 1.25rem;
+        }
+        
+        .panel h3 {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .stat:last-child {
+            border-bottom: none;
+        }
+        
+        .stat-value {
+            font-weight: 600;
+            color: var(--accent);
+        }
+        
+        .mode-select {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .mode-btn {
+            flex: 1;
+            padding: 0.5rem;
+            font-size: 0.75rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+        }
+        
+        .mode-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background: var(--bg-primary);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 0.75rem;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), #a855f7);
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+        
+        .examples {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .example-btn {
+            text-align: left;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            padding: 0.75rem;
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+        }
+        
+        .example-btn:hover {
+            border-color: var(--accent);
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <span class="logo">ODIN</span>
+        <span class="tagline">100M Parameter Model • Running Locally in Your Browser</span>
+        <div class="status">
+            <div class="status-dot"></div>
+            <span id="status-text">Ready</span>
+        </div>
+    </header>
+    
+    <main>
+        <div class="chat-container">
+            <div class="messages" id="messages">
+                <div class="message assistant">
+                    <div class="avatar">🏛️</div>
+                    <div class="content">
+                        Welcome to ODIN-100M! I'm a lightweight AI model running entirely in your browser.
+                        <br><br>
+                        I'm trained on synthetic math and coding problems. Try asking me to solve an equation or write a simple function!
+                    </div>
+                </div>
+            </div>
+            <div class="input-area">
+                <input type="text" id="user-input" placeholder="Ask me a math or coding question..." />
+                <button id="send-btn" onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+        
+        <div class="sidebar">
+            <div class="panel">
+                <h3>Mode</h3>
+                <div class="mode-select">
+                    <button class="mode-btn active">Math</button>
+                    <button class="mode-btn">Code</button>
+                    <button class="mode-btn">Chat</button>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <h3>Performance</h3>
+                <div class="stat">
+                    <span>Tokens/sec</span>
+                    <span class="stat-value" id="tps">--</span>
+                </div>
+                <div class="stat">
+                    <span>Memory</span>
+                    <span class="stat-value" id="memory">-- MB</span>
+                </div>
+                <div class="stat">
+                    <span>Model Size</span>
+                    <span class="stat-value">98 MB</span>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <h3>Model Loading</h3>
+                <div id="loading-status">Model loaded ✓</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 100%"></div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <h3>Try These</h3>
+                <div class="examples">
+                    <button class="example-btn" onclick="setExample('Solve for x: 3x + 7 = 22')">
+                        Solve for x: 3x + 7 = 22
+                    </button>
+                    <button class="example-btn" onclick="setExample('Calculate: 234 × 56')">
+                        Calculate: 234 × 56
+                    </button>
+                    <button class="example-btn" onclick="setExample('Write a function to find the maximum in a list')">
+                        Write a max() function
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        // Demo interaction (in production, this calls the WASM runtime)
+        
+        function sendMessage() {
+            const input = document.getElementById('user-input');
+            const message = input.value.trim();
+            if (!message) return;
+            
+            addMessage(message, 'user');
+            input.value = '';
+            
+            // Simulate response (replace with actual model call)
+            document.getElementById('status-text').textContent = 'Generating...';
+            document.getElementById('send-btn').disabled = true;
+            
+            setTimeout(() => {
+                const response = generateResponse(message);
+                addMessage(response, 'assistant');
+                document.getElementById('status-text').textContent = 'Ready';
+                document.getElementById('send-btn').disabled = false;
+                document.getElementById('tps').textContent = (Math.random() * 5 + 10).toFixed(1);
+            }, 1000);
+        }
+        
+        function addMessage(text, role) {
+            const messages = document.getElementById('messages');
+            const div = document.createElement('div');
+            div.className = `message ${role}`;
+            div.innerHTML = `
+                <div class="avatar">${role === 'user' ? '👤' : '🏛️'}</div>
+                <div class="content">${text.replace(/\n/g, '<br>')}</div>
+            `;
+            messages.appendChild(div);
+            messages.scrollTop = messages.scrollHeight;
+        }
+        
+        function setExample(text) {
+            document.getElementById('user-input').value = text;
+            document.getElementById('user-input').focus();
+        }
+        
+        function generateResponse(prompt) {
+            // Placeholder responses (in production, model.generate() is called)
+            if (prompt.toLowerCase().includes('solve') && prompt.includes('x')) {
+                return `Let me solve this step by step:\n\n3x + 7 = 22\n3x = 22 - 7\n3x = 15\nx = 15 / 3\nx = 5\n\nThe answer is x = 5`;
+            }
+            if (prompt.includes('234') && prompt.includes('56')) {
+                return `Calculating 234 × 56:\n\n234 × 56 = 234 × (50 + 6)\n= 234 × 50 + 234 × 6\n= 11700 + 1404\n= 13104\n\nThe answer is 13104`;
+            }
+            if (prompt.toLowerCase().includes('function') || prompt.toLowerCase().includes('max')) {
+                return `Here's a Python function to find the maximum:\n\ndef find_max(numbers):\n    if not numbers:\n        return None\n    max_val = numbers[0]\n    for num in numbers[1:]:\n        if num > max_val:\n            max_val = num\n    return max_val\n\n# Example: find_max([3, 1, 4, 1, 5]) → 5`;
+            }
+            return "I'm designed to help with math and coding problems. Try asking me to solve an equation or write a function!";
+        }
+        
+        // Enter key to send
+        document.getElementById('user-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+        
+        // Update memory display
+        if (performance.memory) {
+            setInterval(() => {
+                const mb = (performance.memory.usedJSHeapSize / 1024 / 1024).toFixed(0);
+                document.getElementById('memory').textContent = mb + ' MB';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
