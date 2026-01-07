@@ -6,8 +6,9 @@ Reference per misurare speedup dei kernel WASM ottimizzati.
 
 import time
 import random
+from typing import List, Dict, Any
 
-def matmul_naive(A: list, B: list) -> list:
+def matmul_naive(A: List[List[float]], B: List[List[float]]) -> List[List[float]]:
     """Matrix multiplication O(n³) - baseline puro Python"""
     n = len(A)
     m = len(B[0])
@@ -23,17 +24,17 @@ def matmul_naive(A: list, B: list) -> list:
     return C
 
 
-def benchmark_matmul(size: int, iterations: int = 5) -> dict:
+def benchmark_matmul(size: int, iterations: int = 5) -> Dict[str, Any]:
     """Run benchmark for given matrix size"""
     
     # Generate random matrices
     A = [[random.random() for _ in range(size)] for _ in range(size)]
     B = [[random.random() for _ in range(size)] for _ in range(size)]
     
-    times = []
+    times: List[float] = []
     for _ in range(iterations):
         start = time.perf_counter()
-        C = matmul_naive(A, B)
+        _result = matmul_naive(A, B)  # Result unused, we're measuring time
         elapsed = time.perf_counter() - start
         times.append(elapsed)
     
